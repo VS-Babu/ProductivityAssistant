@@ -2,7 +2,7 @@
 A tailored interface designed to enhance the efficiency of Technical Writers.
 
 ### Section 1: Generate a API Key
-1. Login to **console.cloud.google.com** using you gmail ID.
+1. Login to **console.cloud.google.com** using your Gmail ID.
 2. Navigate to **APIs and Services** > **Credentials**.
 3. Click Create **Credentials** and Select **API key**.
    ![APIKey](https://github.com/user-attachments/assets/5bf2fa2c-d8e3-4918-9a83-78dc6ca70625)
