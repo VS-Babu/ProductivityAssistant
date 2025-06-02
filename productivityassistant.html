@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Assistant</title>    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f9fafb;
+            color: #1f2a44;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 24px;
+            text-align: center;
+            margin-top: 0.5px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+	    margin-bottom: 16px;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        button {
+            padding: 10px 24px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            margin-right: 8px;
+            margin-bottom: 12px;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        button:disabled {
+            background-color: #d1d5db;
+            cursor: not-allowed;
+        }
+        #output {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        #output h1, #output h2, #output h3 {
+            font-weight: 600;
+            color: #111827;
+            margin: 16px 0 8px;
+        }
+        #output h1 {
+            font-size: 1.5rem;
+        }
+        #output h2 {
+            font-size: 1.25rem;
+        }
+        #output h3 {
+            font-size: 1.1rem;
+        }
+        #output p {
+            margin: 8px 0;
+        }
+        #output ul, #output ol {
+            margin: 8px 0;
+            padding-left: 24px;
+        }
+        #output code {
+            background-color: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        #output pre {
+            background-color: #f3f4f6;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        .prompt-section {
+            margin-bottom: 24px;
+        }
+        .prompt-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+        .prompt-section select, .prompt-section input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: #fff;
+        }
+        .prompt-section select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1;
+            border-radius: 6px;
+            margin-top: 4px;
+        }
+        .dropdown-content a {
+            color: #374151;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.95rem;
+        }
+        .dropdown-content a:hover {
+            background-color: #f3f4f6;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown-btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .dropdown-btn:hover {
+            background-color: #2563eb;
+        }
+        .dropdown-arrow {
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            margin-left: 8px;
+            transform: rotate(45deg);
+        }
+        footer {
+            margin-top: 40px;
+            padding: 16px 0;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+            border-top: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Productivity Assistant</h1>
+    <div class="prompt-section">
+        <label for="taskType">Select Task Type:</label>
+        <select id="taskType" onchange="enableButtons()">
+            <option value="">Select Task Type</option>
+            <option value="createPrompt">Sample Prompts</option>
+            <option value="email">Email Draft</option>
+            <option value="customPrompt">Custom Prompt</option>
+        </select>
+        <label for="customPrompt">Prompt:</label>
+        <textarea id="customPrompt" placeholder="Enter your custom prompt"></textarea>
+        
+        <button id="generatePrompt" onclick="generateContent('createPrompt')" disabled>Generate Prompts</button>
+        <button id="generateEmail" onclick="generateContent('email')" disabled>Email</button>
+        <button id="generateOutput" onclick="generateContent('customPrompt')" disabled>Generate Output</button>
+    </div>
+    <div id="output"></div>
+    <footer>
+        © 2025 Productivity Assistant. All rights reserved.
+    </footer>
+
+    <script>
+        function enableButtons() {
+            const taskType = document.getElementById('taskType').value;
+            const customPrompt = document.getElementById('customPrompt').value;
+            const textarea = document.getElementById('customPrompt');
+
+            // Disable all buttons
+            document.getElementById('generateEmail').disabled = true;
+            document.getElementById('generateOutput').disabled = true;
+            document.getElementById('generatePrompt').disabled = true;
+
+            // Set placeholder text and enable buttons based on task type
+            if (taskType) {
+                if (taskType === 'customPrompt') {
+                    textarea.placeholder = 'Type your customized prompt...';
+                    document.getElementById('generateOutput').disabled = false;
+                    document.getElementById('customPrompt').disabled = false;
+                } else if (taskType === 'createPrompt') {
+                    textarea.placeholder = 'Type your role';
+                    document.getElementById('generatePrompt').disabled = false;
+                } else if (taskType === 'email') {
+                    textarea.placeholder = 'Paste your draft email...';
+                    document.getElementById('generateEmail').disabled = false;
+                }
+            } else {
+                textarea.placeholder = 'Enter your custom prompt';
+            }
+
+            // Enable the custom prompt button if there is text in the custom prompt textarea
+            if (customPrompt.trim() !== '') {
+                document.getElementById('generateOutput').disabled = false;
+                document.getElementById('generateEmail').disabled = true;
+                document.getElementById('generatePrompt').disabled = true;
+            }
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        async function generateContent(taskType) {
+            const customPrompt = document.getElementById('customPrompt').value;
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '<p style="color: #6b7280;">Generating...</p>';
+
+            const apiKey = '';
+            const model = 'gemini-2.0-flash';
+            const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${apiKey}`;
+
+            let prompt = '';
+            if (taskType === 'email') {
+                prompt = `Improve the following professional email, focusing on grammar, spelling, tone, and clarity. Ensure the revised mail is concise, addressess key points, and maintains a polite, professional and positive tone. If needed, offer a solution or next step. Draft an email based on the following prompt: ${customPrompt}`;
+            } else if (taskType === 'customPrompt') {
+                prompt = customPrompt;
+            } else if (taskType === 'createPrompt') {
+                outputDiv.innerHTML = '<p style="color: #6b7280;">Creating a set of new prompts...</p>';
+                prompt = `I want you to act as a: ${customPrompt} Create different sets of prompts for this role.`;
+            }
+
+            const payload = {
+                contents: [
+                    {
+                        parts: [
+                            { text: prompt }
+                        ]
+                    }
+                ]
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const generatedText = data.candidates[0].content.parts[0].text;
+                outputDiv.innerHTML = formatOutput(generatedText);
+            } catch (error) {
+                outputDiv.innerHTML = `<p style="color: #ef4444;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function formatOutput(text) {
+            // Basic markdown-like formatting for the output
+            let formatted = text
+                .replace(/^#{1}\s+(.*)$/gm, '<h1>$1</h1>')
+                .replace(/^#{2}\s+(.*)$/gm, '<h2>$1</h2>')
+                .replace(/^#{3}\s+(.*)$/gm, '<h3>$1</h3>')
+                .replace(/^\*\s+(.*)$/gm, '<li>$1</li>')
+                .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+            
+            // Wrap list items in <ul> tags
+            formatted = formatted.replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>');
+            return formatted;
+        }
+    </script>
+</body>
+</html>
