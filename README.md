@@ -2,10 +2,10 @@
 A tailored interface designed to enhance the efficiency of Technical Writers.
 
 ### Section 1: Generate a API Key
-1. Login to **console.cloud.google.com** using your Gmail ID.
-2. Navigate to **APIs and Services** > **Credentials**.
-3. Click Create **Credentials** and Select **API key**.
-   ![APIKey](https://github.com/user-attachments/assets/5bf2fa2c-d8e3-4918-9a83-78dc6ca70625)
+1. Login to **https://aistudio.google.com/app/apikey** using your Gmail ID.
+2. Click **Create API key**.
+   ![aistudio](https://github.com/user-attachments/assets/21ad4a63-d67c-4763-92d1-d091cf921b69)
+   ![createAPIKey](https://github.com/user-attachments/assets/83f13c2d-d767-46d6-8c7b-d063cf288a14)
 5. Add the newly created key to the _productivityassitant.html_ source file. (Refer to **Section 2** for the sourcefile path.)
    ![image](https://github.com/user-attachments/assets/c0e1a525-d261-4faa-8f34-ee360f188ea7)
    
